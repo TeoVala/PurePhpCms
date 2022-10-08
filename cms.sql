@@ -65,7 +65,7 @@ CREATE TABLE `comments` (
 --
 
 INSERT INTO `comments` (`comment_id`, `comment_post_id`, `comment_author`, `comment_email`, `comment_content`, `comment_status`, `comment_date`) VALUES
-(1, 2, 'Teo Vala', 'teodor.pj@gmail.com', 'This is a example lorem ipsum adasdadasdasd', 'approved', '2022-08-30'),
+(1, 2, 'Teo Vala', 'dassad@dasdas', 'This is a example lorem ipsum adasdadasdasd', 'approved', '2022-08-30'),
 (5, 2, 'Teo', 'sdaoasop@fasdopas', 'In eu purus quis purus feugiat commodo vel a diam. Quisque magna purus, feugiat et lorem id, laoreet lobortis sapien. Pellentesque bibendum rhoncus quam, vel vestibulum lorem faucibus ut.', 'approved', '2022-09-01'),
 (6, 16, 'Greg', 'tgds@dasogrec', 'In eu purus quis purus feugiat commodo vel a diam. Quisque magna purus, feugiat et lorem id, laoreet lobortis sapien. Pellentesque bibendum rhoncus quam, vel vestibulum lorem faucibus ut.', 'approved', '2022-09-01'),
 (7, 16, 'Joe Doe', 'dasdas@dasdasdasc', 'In eu purus quis purus feugiat commodo vel a diam. Quisque magna purus, feugiat et lorem id, laoreet lobortis sapien. Pellentesque bibendum rhoncus quam, vel vestibulum lorem faucibus ut.', 'approved', '2022-09-01'),
