@@ -2,6 +2,7 @@
 session_start();?>
 
 <?php include "../includes/db.php";
+include "./functions.php";
 
 if(!isset($_SESSION['user_role'])) {
 
@@ -37,6 +38,18 @@ if(!isset($_SESSION['user_role'])) {
 
     <!-- Custom Fonts -->
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- WYSIWYG EDITOR -->
+
+    <link href="css/summernote.min.css" rel="stylesheet">
+    <!--Loader Css-->
+
+    <link href="css/loader.css" rel="stylesheet">
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

@@ -19,6 +19,8 @@
         move_uploaded_file($post_image_temp, "../images/$post_image");
 */
 
+        $user_password = password_hash($user_password, PASSWORD_BCRYPT, ['cost' => 10]);
+
         $query = "INSERT INTO users(user_firstname, user_lastname,user_role, username, user_email,user_password)";
 
         $query .= "VALUES ('{$user_firstname}', '{$user_lastname}', '{$user_role}', '{$username}', '{$user_email}', 
@@ -30,7 +32,7 @@
 
 
         //Μήνυμα ότι ο χρήστης δημιουργήθηκε με επιτυχία
-        echo "User Created: "." "."<a href='users.php'>View Users</a> ";
+        echo "<p class='bg-success'>User Created: "." "."<a href='users.php'>View Users</a> </p>";
 
 
     }

@@ -3,8 +3,8 @@
     // Δημιουργια post
 
     if (isset($_POST['create_post'])){
-        $post_title = $_POST['title'];
-        $post_author = $_POST['author'];
+        $post_title = escape($_POST['title']);
+        $post_user = $_POST['post_user'];
         $post_category_id = $_POST['post_category'];
         $post_status = $_POST['post_status'];
 
@@ -18,10 +18,10 @@
 
         move_uploaded_file($post_image_temp, "../images/$post_image");
 
-        $query = "INSERT INTO posts(post_title, post_category_id, post_author, 
+        $query = "INSERT INTO posts(post_title, post_category_id, post_user, 
                   post_date, post_image, post_content, post_tags, post_status)";
 
-        $query .= "VALUES ('{$post_title}', {$post_category_id}, '{$post_author}', 
+        $query .= "VALUES ('{$post_title}', {$post_category_id}, '{$post_user}', 
                 now(), '{$post_image}', '{$post_content}', '{$post_tags}',
                  '{$post_status}')";
 
@@ -29,8 +29,9 @@
 
         confirm($create_post_query);
 
+        $the_post_id = mysqli_insert_id($conn);
 
-        echo "Post Created: "." "."<a href='posts.php'>View Posts</a> ";
+        echo "<p class='bg-success'>Post Created: "." "."<a href='./posts.php'>View Posts</a> </p>";
     }
 
 ?>
@@ -72,12 +73,35 @@
 
     <div class="form-group">
         <label for="author">Post Author</label>
-        <input type="text" class="form-control" name="author">
+        <select name="post_user" id="post_category">
+        <?php
+        $query = "SELECT * FROM users";
+
+        $select_users = mysqli_query($conn, $query);
+
+        confirm($select_users);
+
+        while ($row = mysqli_fetch_assoc($select_users)) {
+            $user_id = $row['user_id'];
+            $username = $row['username'];
+
+            echo "<option value='{$username}'>{$username}</option>";
+
+        }
+
+        ?>
+        </select>
+
     </div>
 
     <div class="form-group">
-        <label for="post_status">Post Status</label>
-        <input type="text" class="form-control" name="post_status">
+        <label for="author">Post status</label>
+        <select name="post_status" id="">
+            <option value="draft">Post Status</option>
+            <option value="published">Publish</option>
+            <option value="draft">Draft</option>
+        </select>
+
     </div>
 
     <div class="form-group">
@@ -92,7 +116,7 @@
 
     <div class="form-group">
         <label for="post_content">Post Content</label>
-        <textarea class="form-control" name="post_content" cols="30" rows="10"></textarea>
+        <textarea class="form-control" id="summernote" name="post_content" cols="30" rows="10"></textarea>
 
         <div class="form-group">
             <input type="submit" class="btn btn-primary" name="create_post" value="Publish">

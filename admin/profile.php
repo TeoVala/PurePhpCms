@@ -1,5 +1,5 @@
 <?php include "includes/admin_header.php";
-include "functions.php";
+
 
     if (isset($_SESSION['username'])){
 
@@ -26,15 +26,15 @@ include "functions.php";
         $username = $_POST['username'];
         $user_password = $_POST['user_password'];
         $user_email = $_POST['user_email'];
-        $user_role = $_POST['user_role'];
+
 
         $query = "UPDATE users SET ";
         $query .= "user_firstname='{$user_firstname}', ";
         $query .= "user_lastname='{$user_lastname}', ";
         $query .= "username = '{$username}', ";
         $query .= "user_password='{$user_password}', ";
-        $query .= "user_email='{$user_email}', ";
-        $query .= "user_role='{$user_role}' ";
+        $query .= "user_email='{$user_email}' ";
+
 
         $query .= "WHERE username = '{$username}'";
 
@@ -79,27 +79,7 @@ include "functions.php";
                         </div>
 
 
-                        <div class="form-group">
-                            <label for="role">Role</label>
-                            <select name="user_role" id="">
 
-                                <option value="subscriber"><?php echo ucfirst($user_role); ?></option>
-
-                                <?php
-                                if ($user_role == 'admin') {
-                                    echo "<option value='subscriber'>Subscriber</option>";
-                                }
-
-                                else {
-                                    echo "<option value='admin'>Admin</option>";
-
-                                }
-
-
-                                ?>
-
-                            </select>
-                        </div>
 
 
                         <div class="form-group">
@@ -110,7 +90,7 @@ include "functions.php";
 
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="password" value="<?php echo $user_password; ?>" class="form-control" name="user_password">
+                            <input type="password" autocomplete="off" class="form-control" name="user_password">
 
                         </div>
 

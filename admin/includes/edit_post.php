@@ -9,7 +9,7 @@
 
         while ($row = mysqli_fetch_assoc($select_posts_by_id)) {
             $post_id = $row['post_id'];
-            $post_author = $row['post_author'];
+            $post_user = $row['post_user'];
             $post_title = $row['post_title'];
             $post_category_id = $row['post_category_id'];
             $post_status = $row['post_status'];
@@ -21,10 +21,21 @@
 
         }
 
+        // Reset post views button
+        if (isset($_POST['reset_views'])){
+
+            $query = "SELECT * FROM posts ";
+
+            $query = "UPDATE posts SET post_views_count=0 WHERE post_id= $the_post_id";
+
+            $select_curr_post = mysqli_query($conn, $query);
+
+        }
+
         // Κάνει set στο database τα input του χρήστη
         if (isset($_POST['update_post'])){
 
-            $post_author = $_POST['author'];
+            $post_user = $_POST['post_user'];
             $post_title = $_POST['title'];
             $post_category_id = $_POST['post_category'];
             $post_status = $_POST['post_status'];
@@ -51,7 +62,7 @@
             $query .= "post_title='{$post_title}', ";
             $query .= "post_category_id='{$post_category_id}', ";
             $query .= "post_date = now(), ";
-            $query .= "post_author='{$post_author}', ";
+            $query .= "post_user='{$post_user}', ";
             $query .= "post_status='{$post_status}', ";
             $query .= "post_tags='{$post_tags}', ";
             $query .= "post_content='{$post_content}', ";
@@ -62,6 +73,8 @@
             $update_post = mysqli_query($conn,$query);
 
             confirm($update_post);
+
+            echo "<p class='bg-success'> Post Update. <a href='../post.php?p_id={$the_post_id}'>View post</a> or <a href='posts.php'>Edit more Posts</a></p>";
         }
 
     }
@@ -83,14 +96,18 @@
                 $query = "SELECT * FROM categories";
 
                 $select_categories= mysqli_query($conn, $query);
-
-            confirm($select_categories);
+                confirm($select_categories);
 
                 while ($row = mysqli_fetch_assoc($select_categories)) {
                     $cat_id = $row['cat_id'];
                     $cat_title = $row['cat_title'];
 
-                    echo "<option value='{$cat_id}'>{$cat_title}</option>";
+                    if ($cat_id == $post_category_id) {
+                        echo "<option selected value='{$cat_id}'>{$cat_title}</option>";
+                    }
+                    else {
+                        echo "<option value='{$cat_id}'>{$cat_title}</option>";
+                    }
 
                 }
 
@@ -103,13 +120,51 @@
     </div>
 
     <div class="form-group">
-        <label for="author">Post Author</label>
-        <input value="<?php echo $post_author; ?>" type="text" class="form-control" name="author">
+        <label for="user">Post User</label>
+        <select name="post_user" id="post_category">
+            <?php
+            $query = "SELECT * FROM users";
+
+            $select_users = mysqli_query($conn, $query);
+
+            confirm($select_users);
+
+            while ($row = mysqli_fetch_assoc($select_users)) {
+                $user_id = $row['user_id'];
+                $username = $row['username'];
+
+
+
+                if ($username == $post_user) {
+                    echo "<option selected value='{$username}'>{$username}</option>";
+                }
+                else {
+                    echo "<option value='{$username}'>{$username}</option>";
+                }
+
+            }
+
+            ?>
+        </select>
+
     </div>
 
     <div class="form-group">
-        <label for="post_status">Post Status</label>
-        <input value="<?php echo $post_status; ?>" type="text" class="form-control" name="post_status">
+        <select name="post_status" id="">
+
+            <option value=' <?php echo $post_status; ?>'> <?php echo ucfirst($post_status); ?></option>
+
+            <?php
+
+            if ($post_status == 'published') {
+                echo "<option value='draft'> Draft  </option>";
+            }
+            else {
+                echo "<option value='published'> Published  </option>";
+            }
+
+            ?>
+        </select>
     </div>
 
     <div class="form-group">
@@ -127,10 +182,16 @@
 
     <div class="form-group">
         <label for="post_content">Post Content</label>
-        <textarea class="form-control" name="post_content" cols="30" rows="10"><?php echo $post_content; ?></textarea>
+        <textarea class="form-control" name="post_content" id="summernote"  cols="30" rows="10"><?php echo $post_content; ?></textarea>
+
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary" name="reset_views" value="Reset Post Views">
+    </div>
+
 
         <div class="form-group">
             <input type="submit" class="btn btn-primary" name="update_post" value="Update">
         </div>
+
 
 </form>

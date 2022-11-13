@@ -10,50 +10,47 @@
 
     */
 
-    $query = "SELECT count(*) FROM posts";
-    $post_count_query = mysqli_query($conn, $query);
-    $row = mysqli_fetch_array($post_count_query);
+    // Queries για να λαμβάνουν τa data απ'το database
 
-    $post_count = $row[0];
+    if (is_admin()) {
+        $post_publish_count = checkStatus('posts', 'post_status', 'published');
 
-    /* Βρίσκει ποια post είναι σε Draft */
-    $query = "SELECT COUNT(*) FROM posts WHERE post_status ='draft'";
-    $select_all_draft_posts_query = mysqli_query($conn, $query);
-    $row = mysqli_fetch_array($select_all_draft_posts_query);
-    $post_draft_count = $row[0];
+        $post_count = recordCount('posts');
 
+        /* Βρίσκει ποια post είναι σε Draft */
 
-    $query = "SELECT count(*) FROM comments";
-    $comment_count_query = mysqli_query($conn, $query);
-    $row = mysqli_fetch_array($comment_count_query);
+        $post_draft_count = checkStatus('posts', 'post_status', 'draft');
 
-    $comment_count = $row[0];
+        $comment_count = recordCount('comments');
 
-    $query = "SELECT count(*) FROM comments WHERE comment_status= 'unapproved'";
-    $unapproved_comments_count_query = mysqli_query($conn, $query);
-    $row = mysqli_fetch_array($unapproved_comments_count_query);
+        $unapp_com_count = checkStatus('comments', 'comment_status', 'unapproved');
 
-    $unapp_com_count = $row[0];
+        $user_count = recordCount('users');
 
-    $query = "SELECT count(*) FROM users";
-    $user_count_query = mysqli_query($conn, $query);
-    $row = mysqli_fetch_array($user_count_query);
+        $user_role_count = checkStatus('users', 'user_role', 'subscriber');
 
-    $user_count = $row[0];
+        $categories_count = recordCount('categories');
 
-    $query = "SELECT count(*) FROM users WHERE user_role= 'subscriber'";
-    $user_role_count_query = mysqli_query($conn, $query);
-    $row = mysqli_fetch_array($user_role_count_query);
+    } else {
 
-    $user_role_count = $row[0];
+        $post_publish_count = checkStatus_user('posts', 'post_status', 'published', 'post_user' ,$_SESSION['username']);
 
-    $query = "SELECT count(*) FROM categories";
-    $categories_count_query = mysqli_query($conn, $query);
-    $row = mysqli_fetch_array($categories_count_query);
+        $post_count = recordCount_user('posts', 'post_user',$_SESSION['username']);
 
-    $categories_count = $row[0];
+        /* Βρίσκει ποια post είναι σε Draft */
 
+        $post_draft_count = checkStatus_user('posts', 'post_status', 'draft', 'post_user', $_SESSION['username']);
 
+        $comment_count = recordCount('comments');
+
+        $unapp_com_count = checkStatus('comments', 'comment_status', 'unapproved');
+
+        $user_count = recordCount('users');
+
+        $user_role_count = checkStatus('users', 'user_role', 'subscriber');
+
+        $categories_count = recordCount('categories');
+    }
 
 
 ?>
@@ -108,6 +105,8 @@
             </a>
         </div>
     </div>
+
+    <?php if(is_admin()) : ?>
     <div class="col-lg-3 col-md-6">
         <div class="panel panel-yellow">
             <div class="panel-heading">
@@ -115,6 +114,9 @@
                     <div class="col-xs-3">
                         <i class="fa fa-user fa-5x"></i>
                     </div>
+
+
+
                     <div class="col-xs-9 text-right">
                         <div class='huge'><?php echo $user_count ?></div>
                         <div> Users</div>
@@ -152,6 +154,7 @@
             </a>
         </div>
     </div>
+    <?php endif; ?>
 </div>
 <!-- /.row -->
 
@@ -170,10 +173,10 @@
                 ['Data', 'Count',],
 
                 <?php
-                    $element_text = ['Active Posts', 'Draft Posts', 'Comments', 'Pending Comms', 'Users', 'Subscribers', 'Categories'];
-                    $element_count = [$post_count, $post_draft_count, $comment_count, $unapp_com_count, $user_count, $user_role_count, $categories_count];
+                    $element_text = ['All posts','Active Posts', 'Draft Posts', 'Comments', 'Pending Comms', 'Users', 'Subscribers', 'Categories'];
+                    $element_count = [$post_count, $post_publish_count, $post_draft_count, $comment_count, $unapp_com_count, $user_count, $user_role_count, $categories_count];
 
-                    for ($i = 0;$i < 7; $i++){
+                    for ($i = 0;$i < 8; $i++){
                         echo "['{$element_text[$i]}'".","."{$element_count[$i]}],";
 
                     }

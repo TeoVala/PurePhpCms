@@ -7,11 +7,23 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="index.php">Cms Admin</a>
+        <a class="navbar-brand" href="/admin">Cms Admin</a>
     </div>
     <!-- Top Menu Items -->
     <ul class="nav navbar-right top-nav">
-        <li><a href="../index.php">Homepage</a></li>
+
+        <!--<li><a href="">
+                <?php /*echo "Users Online: ".users_online(); */?>
+
+            </a></li>  old users online-->
+
+
+        <li><a href="">
+                <span class="usersOnline"></span>
+
+            </a></li>
+
+        <li><a href="../">Homepage</a></li>
 
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <?php echo $_SESSION['username']; ?> <b class="caret"></b></a>
@@ -33,7 +45,7 @@
         <ul class="nav navbar-nav side-nav">
 
             <li >
-                <a href="index.php"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                <a href="/admin"><i class="fa fa-fw fa-dashboard"></i> My Data</a>
             </li>
 
             <li>
@@ -57,6 +69,8 @@
                 <a href="comments.php"><i class="fa fa-fw fa-file"></i> Comments</a>
             </li>
 
+            <?php if(is_admin()) : ?>
+
             <li>
                 <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Users<i class="fa fa-fw fa-caret-down"></i></a>
                 <ul id="demo" class="collapse">
@@ -66,12 +80,12 @@
                     <li>
                         <a href="users.php?source=add_user">Add user</a>
                     </li>
-                    <li>
-                        <a href="users.php?source=edit_user">Edit user</a>
-                    </li>
+
                 </ul>
 
             </li>
+
+            <?php endif; ?>
 
             <li>
                 <a href="profile.php"><i class="fa fa-fw fa-dashboard"></i> Profile</a>

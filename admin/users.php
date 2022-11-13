@@ -1,5 +1,13 @@
 <?php include "includes/admin_header.php";
-include "functions.php";
+
+
+    if (!is_admin()) {
+
+        header("Location: index.php");
+
+    }
+
+
 
 ?>
 

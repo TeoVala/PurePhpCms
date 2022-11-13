@@ -19,26 +19,67 @@
 
     <!-- Σύνδεση χρήστη -->
     <div class="well">
-        <h4>Login</h4>
-        <form action="includes/login.php" method="post">
-            <div class="form-group">
-                <input name = "username" type="text" class="form-control" placeholder="Enter username">
 
-            </div>
+        <?php if(isset($_SESSION['user_role'])): ?>
 
-            <div class="input-group">
-                <input name = "password" type="password" class="form-control" placeholder="Enter password">
-            <span class="input-group-btn">
-                <button class="btn btn-primary" name="login" type="submit">Submit
-                </button>
+            <h4>Logged in as <?php echo $_SESSION['username']?></h4>
+            <a href="/includes/logout.php" class="btn btn-primary">Logout</a>
 
-            </span>
+        <?php  else: ?>
 
-            </div>
+            <?php
+            is_logged_redirect('/admin/');
+
+            if (ifItIsMethod('post')){
+
+                if (isset($_POST['login'])){
+
+                    if (!empty($_POST['username']) && !empty($_POST['password'])) {
+
+                        login_user($_POST['username'], $_POST['password']);
+
+                    }
+
+                    else {
+
+                        redirect('/login');
+                    }
+
+                }
+            }
+
+            ?>
+
+            <h4>Login</h4>
+            <form action="" method="post">
+                <div class="form-group">
+                    <input name = "username" type="text" class="form-control" placeholder="Enter username">
+
+                </div>
+
+                <div class="input-group">
+                    <input name = "password" type="password" class="form-control" placeholder="Enter password">
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" name="login" type="submit">Submit</button>
+
+                    </span>
+
+                </div>
+
+                <div class="form-group">
+                    <a href="/forgot?forgot=<?php echo uniqid(true); ?>">Forgot password</a>
+
+                </div>
+
+            </form><!-- Search form -->
+            <!-- /.input-group -->
 
 
-        </form><!-- Search form -->
-        <!-- /.input-group -->
+        <?php  endif; ?>
+
+
+
+
     </div>
 
 

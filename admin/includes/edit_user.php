@@ -1,62 +1,76 @@
 <?php
+
+
     // Παίρνει το user id από το '/admin/users.php' όταν ο χρήστης πατάει το url
-    if(isset($_GET['edit_user'])){
+    if(isset($_GET['edit_user'])) {
         $the_user_id = $_GET['edit_user'];
 
         $query = "SELECT * FROM users WHERE user_id = $the_user_id";
 
-        $select_users_query= mysqli_query($conn, $query);
+        $select_users_query = mysqli_query($conn, $query);
 
         while ($row = mysqli_fetch_assoc($select_users_query)) {
-            $username = $row['username'];
+
+            $user_id        = $row['user_id'];
+            $username       = $row['username'];
+            $user_password  = $row['user_password'];
             $user_firstname = $row['user_firstname'];
-            $user_lastname = $row['user_lastname'];
-            $user_email = $row['user_email'];
-            $user_password = $row['user_password'];
-            $user_role = $row['user_role'];
+            $user_lastname  = $row['user_lastname'];
+            $user_email     = $row['user_email'];
+            $user_role      = $row['user_role'];
 
         }
 
 
-    }
 
-    // Κάνει set στο database τα input του χρήστη
-    if (isset($_POST['edit_user'])) {
-        $user_firstname = $_POST['user_firstname'];
-        $user_lastname = $_POST['user_lastname'];
-        $username = $_POST['username'];
-        $user_password = $_POST['user_password'];
-        $user_email = $_POST['user_email'];
-        $user_role = $_POST['user_role'];
+        if (isset($_POST ['edit_user'])) {
 
-
-        /*   $post_image = $_FILES['image']['name'];
-           $post_image_temp = $_FILES['image']['tmp_name'];*/
+            $username = $_POST['username'];
+            $user_firstname = $_POST['user_firstname'];
+            $user_lastname = $_POST['user_lastname'];
+            $user_email = $_POST['user_email'];
+            $user_password = $_POST['user_password'];
+            $user_role = $_POST['user_role'];
 
 
+            // Κάνει set στο database τα input του χρήστη
+            if (!empty($user_password)) {
+                $query_password = "SELECT user_password FROM users WHERE user_id = $the_user_id";
+                $get_user_query = mysqli_query($conn, $query_password);
+                confirm($get_user_query);
 
-        /*$post_date = date('d-m-y');
+                $row = mysqli_fetch_array($get_user_query);
 
+                $db_user_password = $row['user_password'];
 
-        move_uploaded_file($post_image_temp, "../images/$post_image");
+                if ($db_user_password != $user_password) {
+                    $hashed_password = password_hash($user_password, PASSWORD_BCRYPT, ['cost' => 12]);
+                }
 
-    */
+                $query = "UPDATE users SET ";
+                $query .= "user_firstname='{$user_firstname}', ";
+                $query .= "user_lastname='{$user_lastname}', ";
+                $query .= "username = '{$username}', ";
+                $query .= "user_password='{$hashed_password}', ";
+                $query .= "user_email='{$user_email}', ";
+                $query .= "user_role='{$user_role}' ";
 
-        $query = "UPDATE users SET ";
-        $query .= "user_firstname='{$user_firstname}', ";
-        $query .= "user_lastname='{$user_lastname}', ";
-        $query .= "username = '{$username}', ";
-        $query .= "user_password='{$user_password}', ";
-        $query .= "user_email='{$user_email}', ";
-        $query .= "user_role='{$user_role}' ";
+                $query .= "WHERE user_id = {$the_user_id}";
 
-        $query .= "WHERE user_id = {$the_user_id}";
+                $update_users = mysqli_query($conn, $query);
 
-        $update_users = mysqli_query($conn,$query);
+                confirm($update_users);
 
-        confirm($update_users);
+                /* header('Location: '.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING']);*/
+                //Μήνυμα ότι ο χρήστης δημιουργήθηκε με επιτυχία
 
-        header('Location: users.php');
+                echo "<p class='bg-success'>User Updated </p>";
+            }
+
+        }
+
+    } else {
+        header("Location:index.php");
 
     }
 
@@ -80,7 +94,7 @@
         <label for="role">Role</label>
         <select name="user_role" id="">
 
-            <option value="subscriber"><?php echo ucfirst($user_role); ?></option>
+            <option value="<?php echo $user_role; ?>"><?php echo ucfirst($user_role); ?></option>
 
             <?php
                 if ($user_role == 'admin') {
@@ -107,7 +121,7 @@
 
     <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" value="<?php echo $user_password; ?>" class="form-control" name="user_password">
+        <input type="password" autocomplete="off" class="form-control" name="user_password">
 
     </div>
 

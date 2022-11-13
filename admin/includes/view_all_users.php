@@ -51,7 +51,7 @@
                     <td><a href='users.php?ch_admin={$user_id}'>Admin</a></td>
                     <td><a href='users.php?ch_sub={$user_id}'>Subscriber</a></td>
                     <td><a href='users.php?source=edit_user&edit_user={$user_id}'>Edit</a></td>
-                    <td><a href='users.php?delete={$user_id}'>Delete</a></td>
+                    <td><a onClick=\" javascript: return confirm('Are you sure you want to delete'); \" href='users.php?delete={$user_id}'>Delete</a></td>
     
     
                </tr>";
@@ -74,17 +74,27 @@
 
     //Update Delete στο database
     if (isset($_GET['delete'])){
-        $the_user_id = $_GET['delete'];
 
-        $query = "DELETE FROM users WHERE user_id = {$the_user_id}";
+        if (isset($_SESSION['user_role'])) {
 
-        $delete_query = mysqli_query($conn, $query);
+            if($_SESSION['user_role'] ='admin') {
 
-        confirm($delete_query);
+            $the_user_id = mysqli_real_escape_string($conn, $_GET['delete']);
 
-        header("Location: users.php");
+            $query = "DELETE FROM users WHERE user_id = {$the_user_id}";
 
+            $delete_query = mysqli_query($conn, $query);
+
+            confirm($delete_query);
+
+            header("Location: users.php");
+
+            }
+        }
     }
+
+    // Αυτά γίνονται με get το είπε και ο ιδιος καλύτερα να τα έκανες
+    // Post αν ήθελες να τα ανεβάσεις
 
     if (isset($_GET['ch_admin'])){
         $the_user_id = $_GET['ch_admin'];

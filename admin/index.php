@@ -1,5 +1,7 @@
 <?php include "includes/admin_header.php" ?>
 
+
+
     <div id="wrapper">
 
         <!-- Navigation -->
@@ -20,6 +22,7 @@
 
                             <small><?php echo "Hello there ".$_SESSION['username']; ?></small>
                         </h1>
+
 
 
 
