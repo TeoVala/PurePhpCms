@@ -5,3 +5,7 @@
 Login
 Username:admin
 Password:admin
+
+Subscriber Login
+Username:user1
+Password:user1
