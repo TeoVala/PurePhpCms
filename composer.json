@@ -1,0 +1,19 @@
+{
+    "name": "teo/udemy-cms",
+    "require": {
+        "phpmailer/phpmailer": "^6.6"
+    },
+
+    "autoload": {
+        "classmap": [
+            "classes"
+        ]
+    },
+
+    "authors": [
+        {
+            "name": "TeoVala",
+            "email": "nomail@nomail.com"
+        }
+    ]
+}
